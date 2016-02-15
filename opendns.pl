@@ -20,6 +20,8 @@ my $urls = {
 my $conf = { Config::General->new( $Bin . '/opendns.conf')->getall };
 my (undef,undef,$hour,undef,undef,undef,$wday,undef,undef) = localtime(time);
 $wday = 7 unless $wday;
+print "Start:".localtime(time)."\n";
+
 my @rules = ();
 foreach my $net (keys %{ $conf->{networks}}) {
 	foreach my $rules (keys %{ $conf->{networks}->{$net}  }) {
@@ -35,6 +37,7 @@ foreach my $net (keys %{ $conf->{networks}}) {
 	}
 }
 exit unless @rules;
+print "Executed ".@rules."\n";
 my $ua = LWP::UserAgent->new(ssl_opts => { verify_hostname => 0 });
 $ua->cookie_jar( HTTP::Cookies->new( file => $Bin . '/cookie.txt' , autosave => 1) );
 $ua->agent($conf->{browser}->{agent});
